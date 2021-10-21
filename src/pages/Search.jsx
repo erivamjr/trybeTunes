@@ -9,7 +9,6 @@ class Search extends React.Component {
     super();
     this.state = {
       searchAlbum: '',
-      actualAlbum: '',
       nameInput: '',
       loading: false,
       isSaveButtonDisabled: true,

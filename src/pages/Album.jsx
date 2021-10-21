@@ -12,7 +12,10 @@ class Album extends React.Component {
     });
   }
 
-  componentDidMount() { // Essa função é executada no momento que o componente é montado. Por isso funciona como um evento uma vez que foi criado um link em todos os albuns, então uma vez que vc clica nele 'gera' um novo componente
+  /* Requisito feito com a ajuda de Assis Meneghetti
+  Função requisitada por ultimo com o componentDidMount()
+  toda vez que a função é requisitada, é gerada um componente */
+  componentDidMount() {
     const { match: { params: { id } } } = this.props;
     getMusics(id).then((response) => {
       this.setState({
@@ -22,10 +25,12 @@ class Album extends React.Component {
   }
 
   render() {
+    const { musics } = this.state;
+    const infoAlbuns = musics[0]; // posição do array onde contem as informações do album sem arquivo track
     return (
       <div data-testid="page-album">
         <Header />
-        <div data-testid="page-album">
+        <div>
           {musics.length
           && (
             <div>

@@ -3,13 +3,17 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from './MusicCard';
+import Loading from './Loading';
+import { addSong } from '../services/favoriteSongsAPI';
 
 class Album extends React.Component {
   constructor() {
     super();
     this.state = ({
       musics: [],
+      loading: false,
     });
+    this.favoriteTrack = this.favoriteTrack.bind(this);
   }
 
   /* Requisito feito com a ajuda de Assis Meneghetti
@@ -24,14 +28,24 @@ class Album extends React.Component {
     });
   }
 
+  // código compreendido do repositório do Henrique Martins para resolver o requisito 8
+  // source: https://github.com/tryber/sd-015-b-project-trybetunes/tree/henrique-martins-trybetunes/src
+  favoriteTrack(object) {
+    this.setState({ loading: true });
+    addSong(object).then(() => this.setState(() => ({
+      loading: false,
+    })));
+  }
+
   render() {
-    const { musics } = this.state;
+    const { musics, loading } = this.state;
     const infoAlbuns = musics[0]; // posição do array onde contem as informações do album sem arquivo track
     return (
       <div data-testid="page-album">
         <Header />
         <div>
-          {musics.length
+          { loading ? <Loading />
+            : musics.length
           && (
             <div>
               <img
@@ -48,6 +62,7 @@ class Album extends React.Component {
               <MusicCard
                 key={ index }
                 music={ music }
+                onClick={ this.favoriteTrack }
               />
             ))}
         </div>

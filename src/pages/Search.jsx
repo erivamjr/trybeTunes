@@ -38,7 +38,7 @@ class Search extends React.Component {
     this.setState(
       { searchAlbum: '', loading: true }, // esperando loading para true para depois execulcar a callback
       () => searchAlbumsAPI(searchAlbum).then((promise) => {
-        console.log(promise);
+        // console.log(promise);
         this.setState({ loading: false,
           albums: promise,
           nameInput: searchAlbum });

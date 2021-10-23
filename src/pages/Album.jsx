@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from './MusicCard';
 import Loading from './Loading';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 class Album extends React.Component {
   constructor() {
@@ -21,6 +21,7 @@ class Album extends React.Component {
   toda vez que a função é requisitada, é gerada um componente */
   componentDidMount() {
     const { match: { params: { id } } } = this.props;
+    console.log(getFavoriteSongs());
     getMusics(id).then((response) => {
       this.setState({
         musics: response,
@@ -35,7 +36,9 @@ class Album extends React.Component {
     addSong(object).then(() => this.setState(() => ({
       loading: false,
     })));
+    console.log();
   }
+
 
   render() {
     const { musics, loading } = this.state;

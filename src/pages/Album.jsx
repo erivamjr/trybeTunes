@@ -36,7 +36,6 @@ class Album extends React.Component {
     addSong(object).then(() => this.setState(() => ({
       loading: false,
     })));
-    console.log();
   }
 
   render() {

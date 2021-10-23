@@ -39,7 +39,6 @@ class Album extends React.Component {
     console.log();
   }
 
-
   render() {
     const { musics, loading } = this.state;
     const infoAlbuns = musics[0]; // posição do array onde contem as informações do album sem arquivo track

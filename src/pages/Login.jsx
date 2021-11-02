@@ -28,8 +28,8 @@ class Login extends React.Component {
 
   checkButton() {
     const { userName } = this.state;
-    const minLength = 3;
-    if (userName.length >= minLength) {
+    const MIN_LENGTH = 3;
+    if (userName.length >= MIN_LENGTH) {
       this.setState({ isSaveButtonDisabled: false });
     } else {
       this.setState({ isSaveButtonDisabled: true });

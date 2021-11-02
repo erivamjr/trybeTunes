@@ -4,38 +4,90 @@ import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from './MusicCard';
 import Loading from './Loading';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 
 class Album extends React.Component {
   constructor() {
     super();
     this.state = ({
-      musics: [],
-      loading: false,
+      musics: [], // renderiza as musicas na tela
+      loading: false, // renderiza carregando... quando true
+      favoriteTracks: [], // guarda musicas favoritas
     });
     this.favoriteTrack = this.favoriteTrack.bind(this);
+    this.addFavorites = this.addFavorites.bind(this);
+    this.findFavorite = this.findFavorite.bind(this);
+    this.checkboxChecked = this.checkboxChecked.bind(this);
   }
 
   /* Requisito feito com a ajuda de Assis Meneghetti
   Função requisitada por ultimo com o componentDidMount()
-  toda vez que a função é requisitada, é gerada um componente */
+  toda vez que a função é requisitada, é gerada um
+  componente de cada card de musica */
   componentDidMount() {
     const { match: { params: { id } } } = this.props;
-    console.log(getFavoriteSongs());
     getMusics(id).then((response) => {
       this.setState({
         musics: response,
       });
     });
+    this.addFavorites();
   }
 
-  // código compreendido do repositório do Henrique Martins para resolver o requisito 8
-  // source: https://github.com/tryber/sd-015-b-project-trybetunes/tree/henrique-martins-trybetunes/src
-  favoriteTrack(object) {
+  // adiciona os cards a favoriteTracks para usar como favoritos
+  addFavorites() {
+    this.setState({
+      loading: true,
+    });
+    getFavoriteSongs().then((musicsFavorites) => {
+      this.setState({
+        loading: false,
+        favoriteTracks: musicsFavorites,
+      });
+    });
+  }
+
+  /* função que vai retornar true ou false dependendo
+  do que tiver dentro do array favoritetracks ex: caso
+  ja tiver uma musica igual, retorna false, caso não,
+  retorna true */
+  checkboxChecked(trackId) {
+    const { favoriteTracks } = this.state;
+    const favorite = favoriteTracks.find((track) => track.trackId === trackId);
+    if (favorite) return true;
+    return false;
+  }
+
+  /* função criada para retornar true or false,
+  para ser usada na função favoriteTrack e assim
+  não ficar tão grande */
+  findFavorite(music) {
+    const { favoriteTracks } = this.state;
+    return favoriteTracks.find((favMusic) => (
+      music.trackId === favMusic.trackId
+    ));
+  }
+
+  // função que vai adicionar ou remover a musica dos favoritos
+  favoriteTrack(music) {
+    const favorite = this.findFavorite(music);
     this.setState({ loading: true });
-    addSong(object).then(() => this.setState(() => ({
-      loading: false,
-    })));
+    if (!favorite) {
+      addSong(music)
+        .then(() => this.setState((prevState) => ({
+          loading: false,
+          favoriteTracks: [...prevState.favoriteTracks, music],
+        })));
+    } else {
+      this.setState({ loading: true });
+      removeSong(music)
+        .then(() => this.setState((prevState) => ({
+          favoriteTracks: prevState.favoriteTracks.filter((favTrack) => (
+            favTrack.trackId !== music.trackId
+          )),
+          loading: false,
+        })));
+    }
   }
 
   render() {
@@ -59,11 +111,15 @@ class Album extends React.Component {
           )}
           { musics
             .filter((music) => music.trackId)
-            .map((music, index) => (
+            .map((music) => (
               <MusicCard
-                key={ index }
-                music={ music }
+              // props sendo passada para MusicCard
+                key={ music.trackId }
+                previewUrl={ music.previewUrl }
+                trackName={ music.trackName }
+                trackId={ music.trackId }
                 onClick={ this.favoriteTrack }
+                checkbox={ this.checkboxChecked }
               />
             ))}
         </div>

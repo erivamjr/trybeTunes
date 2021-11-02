@@ -19,13 +19,14 @@ class Search extends React.Component {
   }
 
   makeChange({ target }) {
-    this.setState({ searchAlbum: target.value }, this.checkButton);
+    const { value } = target;
+    this.setState({ searchAlbum: value }, this.checkButton);
   }
 
   checkButton() {
     const { searchAlbum } = this.state;
-    const minLength = 2;
-    if (searchAlbum.length >= minLength) {
+    const MIN_LENGTH = 2;
+    if (searchAlbum.length >= MIN_LENGTH) {
       this.setState({ isSaveButtonDisabled: false });
     } else {
       this.setState({ isSaveButtonDisabled: true });
@@ -36,7 +37,7 @@ class Search extends React.Component {
     e.preventDefault();
     const { searchAlbum } = this.state;
     this.setState(
-      { searchAlbum: '', loading: true }, // esperando loading para true para depois execulcar a callback
+      { searchAlbum: '', loading: true }, // setando loading para true para depois execulcar a callback
       () => searchAlbumsAPI(searchAlbum).then((promise) => {
         // console.log(promise);
         this.setState({ loading: false,

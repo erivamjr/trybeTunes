@@ -18,7 +18,7 @@ class MusicCard extends Component {
           <input
             type="checkbox"
             checked={ checkbox(trackId) }
-            id={ trackId }
+            id="favorite-music"
             name="favorite-music"
             data-testid={ `checkbox-music-${trackId}` }
             onChange={ () => onClick({ trackId, trackName, previewUrl }) }

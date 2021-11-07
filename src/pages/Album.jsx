@@ -49,8 +49,8 @@ class Album extends React.Component {
 
   /* função que vai retornar true ou false dependendo
   do que tiver dentro do array favoritetracks ex: caso
-  ja tiver uma musica igual, retorna false, caso não,
-  retorna true */
+  ja tiver uma musica igual, retorna true, caso não,
+  retorna false */
   checkboxChecked(trackId) {
     const { favoriteTracks } = this.state;
     const favorite = favoriteTracks.find((track) => track.trackId === trackId);
